@@ -37,7 +37,7 @@ function fncAddProduct(){
 		return;
 	}
 
-	$("form").attr("method" , "POST").attr("action" , "/product/addProduct").submit();
+	$("form").attr("method" , "POST").attr("enctype","multipart/form-data").attr("action" , "/product/addProduct").submit();
 }
 
 $(function() {
@@ -62,7 +62,7 @@ $(function() {
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" >
+<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -151,7 +151,7 @@ $(function() {
 		<td width="104" class="ct_write">상품이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input		type="text" name="fileName" class="ct_input_g" 
+			<input		type="file" name="file" class="ct_input_g" 
 							style="width: 200px; height: 19px" maxLength="13"/>
 		</td>
 	</tr>

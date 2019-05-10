@@ -1,5 +1,6 @@
 package com.model2.mvc.web.product;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -12,10 +13,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
@@ -38,12 +41,15 @@ public class ProductController {
 	}
 
 	@Value("#{commonProperties['pageUnit']}")
-	// @Value("#{commonProperties['pageUnit'] ?: 3}")
 	int pageUnit;
 
 	@Value("#{commonProperties['pageSize']}")
-	// @Value("#{commonProperties['pageSize'] ?: 2}")
 	int pageSize;
+	
+	@Value("#{commonProperties['uploadDir']}")
+	String uploadDir;
+	
+	
 
 	@RequestMapping(value = "addProduct", method = RequestMethod.GET)
 	public String addProductView() throws Exception {
@@ -54,10 +60,16 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
-	public String addProduct(@ModelAttribute("product") Product product) throws Exception {
+	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file) throws Exception {
 
 		System.out.println("/product/addProduct : POST");
-		// Business Logic
+		
+		String fileName = file.getOriginalFilename();
+		File target = new File(uploadDir, fileName);
+		
+		FileCopyUtils.copy(file.getBytes(), target);
+		
+		product.setFileName(fileName);
 		productService.addProduct(product);
 
 		return "forward:/product/addProduct.jsp";
@@ -113,9 +125,8 @@ public class ProductController {
 	public String updateProductView(@RequestParam("prodNo") int prodNo, Model model) throws Exception {
 
 		System.out.println("/product/updateProduct : GET");
-		// Business Logic
+		
 		Product product = productService.getProduct(prodNo);
-		// Model °ú View ¿¬°á
 		model.addAttribute("product", product);
 
 		return "forward:/product/updateProductView.jsp";
