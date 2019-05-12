@@ -19,28 +19,30 @@
   		<result property="tranCode" 					column="TRAN_STATUS_CODE" 	jdbcType="CHAR"/>
   		<result property="orderDate" 					column="ORDER_DATA" 			jdbcType="DATE"/>  		 
   		<result property="divyDate" 					column="DLVY_DATE"				jdbcType="DATE"/>
+  		<result property="quantity" 					column="quantity" 				jdbcType="INTEGER"/>
+  		
   	</resultMap>
   	
   	<insert id="addPurchase" parameterType="purchase">
 		INSERT 
-		INTO transaction(tran_no, prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, tran_status_code, order_data, dlvy_date)
+		INTO transaction(tran_no, prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, tran_status_code, order_data, dlvy_date,quantity)
 		VALUES (
 					seq_transaction_tran_no.NEXTVAL, #{purchaseProd.prodNo:INTEGER}, #{buyer.userId:VARCHAR}, #{paymentOption:CHAR},
 					#{receiverName:VARCHAR}, #{receiverPhone:VARCHAR}, #{divyAddr:VARCHAR}, #{divyRequest:VARCHAR}, 1,
-					SYSDATE, #{divyDate:DATE} )
+					SYSDATE, #{divyDate:DATE},#{quantity} )
 	</insert>
   	
   	
 	<select id="getPurchase" parameterType="int" resultMap="purchaseSelectMap">
   		SELECT 
-		prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, dlvy_date, order_data, tran_status_code, tran_no
+		prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, dlvy_date, order_data, tran_status_code, tran_no,quantity
 		FROM transaction
 		WHERE tran_no = #{tranNo}
   	</select>
   	
   	<select id="getPurchase2" parameterType="int" resultMap="purchaseSelectMap">
   		SELECT 
-		prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, dlvy_date, order_data, tran_status_code, tran_no
+		prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, dlvy_date, order_data, tran_status_code, tran_no,quantity
 		FROM transaction
 		WHERE prod_no = #{value}
   	</select>
@@ -67,6 +69,7 @@
 	   	</set>
 	   	WHERE prod_no = #{purchaseProd.prodNo}
 	 </update>
+	
 		 
 	<!-- SQL : SELECT LIST -->
 	<select  id="getPurchaseList"  parameterType="map"	resultMap="purchaseSelectMap">
@@ -75,7 +78,9 @@
 	  					FROM		(	SELECT *
 											FROM transaction
 											<where>
-												 buyer_id=#{buyerId}</where> ) inner_table
+												 buyer_id=#{buyerId}
+											</where> 
+											ORDER BY tran_no) inner_table
 						WHERE ROWNUM &lt;= #{endRowNum} )
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
 	 </select>

@@ -55,4 +55,10 @@ public class ProductServiceImpl implements ProductService{
 		productDao.updateProduct(product);
 	}
 
+	@Override
+	public void updateStock(Product product) {
+		productDao.updateStock(product);
+		
+	}
+
 }

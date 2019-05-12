@@ -83,5 +83,11 @@ public class PurchaseDaoImpl implements PurchaseDao {
 		return sqlSession.selectOne("PurchaseMapper.getTotalCount", search);
 	}
 
+	@Override
+	public void updateQuantity(Purchase purchase) {
+		sqlSession.update("PurchaseMapper.updateQuantity",purchase);
+		
+	}
+
 }
 

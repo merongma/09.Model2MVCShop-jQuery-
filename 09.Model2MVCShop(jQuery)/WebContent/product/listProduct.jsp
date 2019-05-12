@@ -126,7 +126,7 @@ function fncGetUserList(currentPage) {
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">가격</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">등록일</td>	
+		<td class="ct_list_b">상품상세정보</td>	
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">현재상태</td>	
 	</tr>
@@ -146,32 +146,29 @@ function fncGetUserList(currentPage) {
 			<td></td>
 			<td align="left">${product.price }</td>
 			<td></td>
-			<td align="left">${product.regDate }</td>		
+			<td align="left">${product.prodDetail }</td>		
 			<td></td>
 			<td align="left">
-
-				<c:if test="${empty product.proTranCode }">판매중</c:if>
-				<c:if test="${! empty product.proTranCode && empty user }">재고없음</c:if>
+				<c:if test="${product.stock!=0 }">판매중</c:if>
+				<c:if test="${product.stock==0 && empty user && ! empty product.proTranCode }">품절</c:if>
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='1  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">구매완료
 					<h8>배송하기</h8>
 					<input type="hidden" name="prodNo" id="prodNo"  value="${product.prodNo }" />
 					</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role}">재고없음</c:if>
+					<c:if test="${param.menu=='search' && ! empty user.role && product.stock==0 }">품절</c:if>
 				</c:if>
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='2  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">배송중</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role}">재고없음</c:if>
+					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0 }">품절</c:if>
 				</c:if>
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='3  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">배송완료</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role}">재고없음</c:if>
+					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0 }">품절</c:if>
 				</c:if>
-
-				
 			</td>		
 		</tr>
 		<tr>

@@ -1,5 +1,6 @@
 package com.model2.mvc.web.purchase;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -75,7 +76,7 @@ public class PurchaseController {
 
 	@RequestMapping(value = "addPurchase", method = RequestMethod.POST)
 	public String addPurchase(@RequestParam("prodNo") int prodNo, @RequestParam("buyerId") String buyerId,
-			@ModelAttribute("purchase") Purchase purchase, Model model) throws Exception {
+			@ModelAttribute("purchase") Purchase purchase, @RequestParam("quantity") int quantity) throws Exception {
 
 		System.out.println("/purchase/addPurchase : POST");
 
@@ -84,12 +85,15 @@ public class PurchaseController {
 
 		purchase.setBuyer(user);
 		purchase.setPurchaseProd(product);
-
+		//재고, 수량
+		product.setStock(product.getStock()-quantity);
+		System.out.println("바뀐 재고는? "+product.getStock());
+		productService.updateStock(product);
+		
 		purchaseService.addPurchase(purchase);
 
 		purchase.setPaymentOption(purchase.getPaymentOption().trim());
 
-		model.addAttribute(purchase);
 
 		return "forward:/purchase/addPurchaseViewResult.jsp";
 	}
@@ -113,8 +117,8 @@ public class PurchaseController {
 	public String listPurchase(@ModelAttribute("search") Search search, Model model, HttpServletRequest request)
 			throws Exception {
 
-		System.out.println("/user/listPurchase : GET / POST");
-
+		System.out.println("/purchase/listPurchase : GET / POST");
+		
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
@@ -122,19 +126,30 @@ public class PurchaseController {
 
 		User user = (User) request.getSession().getAttribute("user");
 		String buyerId = user.getUserId();
-		System.out.println("session buyerid : " + buyerId);
+		//System.out.println("session buyerid : " + buyerId);
 
-		// Business logic 수행
+		
 		Map<String, Object> map = purchaseService.getPurchaseList(search, buyerId);
 
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit,
 				pageSize);
 		System.out.println(resultPage);
-
-		// Model 과 View 연결
+		
+		
+		
+		List list = (List) map.get("list");
+		
+		for(int i = 0; i<list.size();i++) {
+			Purchase purchase = (Purchase) list.get(i);
+			int prodNo = purchase.getPurchaseProd().getProdNo();
+			Product product = productService.getProduct(prodNo);
+			purchase.setPurchaseProd(product);
+			list.set(i, purchase);	
+		}
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
+		System.out.println("model :"+model);
 
 		return "forward:/purchase/listPurchase.jsp";
 	}

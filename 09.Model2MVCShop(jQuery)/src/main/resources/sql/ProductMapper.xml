@@ -17,6 +17,7 @@
 		<result property="fileName"		column="image_file"			jdbcType="VARCHAR"/>
 		<result property="regDate"		column="reg_date"			jdbcType="DATE"/>
 		<result property="proTranCode" column="TRAN_STATUS_CODE"  	jdbcType="VARCHAR"/>
+		<result property="stock"		column="stock"				jdbcType="NUMERIC"/>
 
 		
 		
@@ -25,15 +26,15 @@
 	<!-- SQL : INSERT -->
 	<insert 	id="addProduct"		parameterType="product" >
 	 	INSERT
-		INTO product( prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date ) 
+		INTO product( prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date,stock ) 
 		VALUES	 (	seq_product_prod_no.NEXTVAL , #{prodName} , #{prodDetail:VARCHAR} ,  #{manuDate:VARCHAR} , 
-							#{price:NUMERIC} , #{fileName}, SYSDATE )
+							#{price:NUMERIC} , #{fileName}, SYSDATE,#{stock} )
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
 	 <select 	id="getProduct"	parameterType="int"	resultMap="productSelectMap">
 		SELECT
-		prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date  		
+		prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date, stock  		
 		FROM product 
 		WHERE prod_no = #{value}
 	 </select>
@@ -46,7 +47,16 @@
 			prod_detail	= #{prodDetail},
 			manufacture_day = #{manuDate} ,
 			price	=	#{price},
-			image_file	=	#{fileName}
+			image_file	=	#{fileName},
+			stock = #{stock}
+	   	</set>
+	   	WHERE prod_no = #{prodNo}
+	 </update>
+	 
+	 <update	id="updateStock"	parameterType="product" >
+	   	UPDATE product
+	   	<set>
+		stock=#{stock}	
 	   	</set>
 	   	WHERE prod_no = #{prodNo}
 	 </update>
@@ -55,7 +65,7 @@
 	<select  id="getProductList"  parameterType="search"	resultMap="productSelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
-	  					FROM		(	SELECT p.prod_no, p.prod_name, p.price, p.reg_date, p.manufacture_day, t.tran_status_code
+	  					FROM		(	SELECT p.prod_no, p.prod_name, p.price, p.reg_date, p.manufacture_day, t.tran_status_code,p.prod_detail,p.stock
 											FROM product p, transaction t
 											<where>
 												 p.prod_no= t.prod_no(+)
@@ -71,7 +81,6 @@
 													</if>
 													</if>
 												</where>
-											
 											ORDER BY p.prod_no ) inner_table
 						WHERE ROWNUM &lt;= #{endRowNum} )
 		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 

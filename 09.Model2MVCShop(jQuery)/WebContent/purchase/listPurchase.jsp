@@ -77,13 +77,13 @@ $(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 		<td colspan="11">전체 ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage } 페이지</td>
 	</tr>
 	<tr>
-		<td class="ct_list_b" width="100">No<br><h7 >(no click:상세정보)</h7></td>
+		<td class="ct_list_b" width="100">주문번호<br><h7 >(no click:상세정보)</h7></td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">회원ID<br><h7 >(id click:상세정보)</h7></td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">회원명</td>
+		<td class="ct_list_b" width="150">주문내역</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">전화번호</td>
+		<td class="ct_list_b">결제금액</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">배송현황</td>
 		<td class="ct_line02"></td>
@@ -99,7 +99,7 @@ $(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 		<tr class="ct_list_pop">
 		<td align="center">
 		<input type="hidden" name="tranNo"  value="${purchase.tranNo }" />
-		${i }
+		${purchase.tranNo}
 		</td>
 		<td></td>
 		<td align="left">
@@ -107,9 +107,13 @@ $(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 		${purchase.buyer.userId}
 		</td>
 		<td></td>
-		<td align="left">${purchase.receiverName}</td>
+		<td align="left">${purchase.purchaseProd.prodName}</td>
 		<td></td>
-		<td align="left">${purchase.receiverPhone}</td>
+		<td align="left">
+		<c:if test="${purchase.quantity>=1 }">${(purchase.purchaseProd.price)*(purchase.quantity)}</c:if>
+		<c:if test="${purchase.quantity==0 }">${purchase.purchaseProd.price}</c:if>
+		원
+		</td>
 		<td></td>
 		<td align="left">
 				현재

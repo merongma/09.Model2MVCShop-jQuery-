@@ -72,4 +72,10 @@ public class PurchaseServiceImpl implements PurchaseService{
 		purchaseDao.updatePurcahse(purchase);
 		
 	}
+
+	@Override
+	public void updateQuantity(Purchase purchase) throws Exception {
+		purchaseDao.updateQuantity(purchase);
+		
+	}
 }
