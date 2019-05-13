@@ -39,6 +39,8 @@ function fncGetUserList(currentPage) {
 	$("h7").css("color" , "green");
 	$("h8").css("color" , "blue");
 	
+	$(".ct_list_pop td:nth-child(9):contains('품절')").css("color","red");
+	
 	$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 
 });	
@@ -128,7 +130,11 @@ function fncGetUserList(currentPage) {
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">상품상세정보</td>	
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">현재상태</td>	
+		<td class="ct_list_b">현재상태</td>
+		<td class="ct_line02"></td>
+		<c:if test = "${param.menu =='manage'}">
+		<td class="ct_list_b">재고</td>
+		<td class="ct_line02"></td></c:if>	
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -144,13 +150,13 @@ function fncGetUserList(currentPage) {
 			<td align="left"><input type="hidden" name="prodNo"  value="${product.prodNo }" />
 			${product.prodName }</td>
 			<td></td>
-			<td align="left">${product.price }</td>
+			<td align="left">${product.price }원</td>
 			<td></td>
 			<td align="left">${product.prodDetail }</td>		
 			<td></td>
 			<td align="left">
 				<c:if test="${product.stock!=0 }">판매중</c:if>
-				<c:if test="${product.stock==0 && empty user && ! empty product.proTranCode }">품절</c:if>
+				<c:if test="${product.stock==0 && (empty user ||  empty product.proTranCode)}">품절</c:if>
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='1  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">구매완료
@@ -162,14 +168,17 @@ function fncGetUserList(currentPage) {
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='2  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">배송중</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0 }">품절</c:if>
+					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0  }">품절</c:if>
 				</c:if>
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='3  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">배송완료</c:if>
 					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0 }">품절</c:if>
 				</c:if>
-			</td>		
+			</td>	
+			<c:if test = "${param.menu =='manage'}">	
+			<td align="left">${product.stock } 개</td>
+			<td></td></c:if>
 		</tr>
 		<tr>
 			<td colspan="11" bgcolor="D6D7D6" height="1"></td>

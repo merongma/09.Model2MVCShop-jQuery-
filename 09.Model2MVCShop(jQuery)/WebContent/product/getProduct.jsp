@@ -9,9 +9,15 @@
 
 $(function() {
 	
+	if(${product.stock }!=0){
  	$( ".ct_btn01:contains('구매')" ).on("click" , function() {
  		self.location = "/purchase/addPurchaseView?prodNo=${product.prodNo }"
 	});
+	}else{
+		$( ".ct_btn01:contains('구매')" ).on("click" , function() {
+		alert("품절상품입니다!");
+		});
+	}
  	
  	$( ".ct_btn01:contains('이전')" ).on("click" , function() {
  		history.go(-1);
