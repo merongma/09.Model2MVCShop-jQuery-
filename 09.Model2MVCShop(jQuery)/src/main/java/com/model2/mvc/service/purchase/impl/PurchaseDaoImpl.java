@@ -61,8 +61,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}	
 
 	@Override
-	public Map<String, Object> getSaleList(Search search) throws Exception {
-		// TODO Auto-generated method stub
+	public Map<String, Object> getShippingList(Search search) throws Exception {
 		return null;
 	}
 
@@ -83,11 +82,6 @@ public class PurchaseDaoImpl implements PurchaseDao {
 		return sqlSession.selectOne("PurchaseMapper.getTotalCount", search);
 	}
 
-	@Override
-	public void updateQuantity(Purchase purchase) {
-		sqlSession.update("PurchaseMapper.updateQuantity",purchase);
-		
-	}
 
 }
 

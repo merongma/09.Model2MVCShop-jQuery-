@@ -85,15 +85,14 @@ public class PurchaseController {
 
 		purchase.setBuyer(user);
 		purchase.setPurchaseProd(product);
-		//재고, 수량
-		product.setStock(product.getStock()-quantity);
-		System.out.println("바뀐 재고는? "+product.getStock());
+		// 재고, 수량
+		product.setStock(product.getStock() - quantity);
+		System.out.println("바뀐 재고는? " + product.getStock());
 		productService.updateStock(product);
-		
+
 		purchaseService.addPurchase(purchase);
 
 		purchase.setPaymentOption(purchase.getPaymentOption().trim());
-
 
 		return "forward:/purchase/addPurchaseViewResult.jsp";
 	}
@@ -118,7 +117,7 @@ public class PurchaseController {
 			throws Exception {
 
 		System.out.println("/purchase/listPurchase : GET / POST");
-		
+
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
@@ -126,30 +125,27 @@ public class PurchaseController {
 
 		User user = (User) request.getSession().getAttribute("user");
 		String buyerId = user.getUserId();
-		//System.out.println("session buyerid : " + buyerId);
+		// System.out.println("session buyerid : " + buyerId);
 
-		
 		Map<String, Object> map = purchaseService.getPurchaseList(search, buyerId);
 
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit,
 				pageSize);
 		System.out.println(resultPage);
-		
-		
-		
+
 		List list = (List) map.get("list");
-		
-		for(int i = 0; i<list.size();i++) {
+
+		for (int i = 0; i < list.size(); i++) {
 			Purchase purchase = (Purchase) list.get(i);
 			int prodNo = purchase.getPurchaseProd().getProdNo();
 			Product product = productService.getProduct(prodNo);
 			purchase.setPurchaseProd(product);
-			list.set(i, purchase);	
+			list.set(i, purchase);
 		}
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
-		System.out.println("model :"+model);
+		System.out.println("model :" + model);
 
 		return "forward:/purchase/listPurchase.jsp";
 	}
@@ -207,7 +203,7 @@ public class PurchaseController {
 		System.out.println("/purchase/updateTranCode : GET");
 
 		Purchase purchase = purchaseService.getPurchase(tranNo);
-	
+
 		product.setProdNo(purchase.getPurchaseProd().getProdNo());
 
 		purchase.setTranCode(tranCode);
@@ -216,6 +212,46 @@ public class PurchaseController {
 		purchaseService.updateTranCode(purchase);
 
 		return "forward:/purchase/listPurchase?tranNo=" + tranNo;
+	}
+
+	@RequestMapping(value = "shippingList")
+	public String shippingList(@ModelAttribute("search") Search search, Model model)
+			throws Exception {
+
+		System.out.println("/purchase/shippingList : GET / POST");
+
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
+		search.setPageSize(pageSize);
+
+		// Business logic 수행
+		Map<String, Object> map = purchaseService.getShippingList(search);
+		
+		System.out.println("list값 : "+map.get("list"));
+		List list = (List) map.get("list");
+
+		for (int i = 0; i < list.size(); i++) {
+			Product product = (Product) list.get(i);
+			int prodNo = product.getProdNo();
+			Purchase purchase = purchaseService.getPurchase2(prodNo);
+			String buyerId = purchase.getBuyer().getUserId();
+			
+			//Product product = productService.getProduct(prodNo);
+			//purchase.setPurchaseProd(product);
+			//list.set(i, purchase);
+		}
+
+		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit,
+				pageSize);
+		System.out.println(resultPage);
+
+		// Model 과 View 연결
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("resultPage", resultPage);
+		model.addAttribute("search", search);
+
+		return "forward:/purchase/shippingList.jsp";
 	}
 
 }

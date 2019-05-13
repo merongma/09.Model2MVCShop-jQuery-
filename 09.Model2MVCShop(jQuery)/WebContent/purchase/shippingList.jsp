@@ -14,16 +14,11 @@ function fncGetUserList(currentPage) {
 
 	$("#currentPage").val(currentPage)
    	
-	$("form").attr("method" , "POST").attr("action" , "/product/listProduct?menu=${param.menu}").submit();
+	$("form").attr("method" , "POST").attr("action" , "/purchase/shippingList?menu=${param.menu}").submit();
 }
 
  $(function() {
-	 
-	 $( "td.ct_btn01:contains('검색')" ).on("click" , function() {
-		fncGetUserList(1);
-	});
-	
-	
+	 	
 	$( ".ct_list_pop td:nth-child(3)" ).on("click" , function() {
 			
 			self.location ="/product/getProduct?prodNo="+$(this).children("input").val()+"&menu=${param.menu}";
@@ -64,13 +59,7 @@ function fncGetUserList(currentPage) {
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="93%" class="ct_ttl01">
-					<!--manage인 경우 상품관리 search인경우 상품목록조회 -->
-					<c:if test="${param.menu=='manage'}" >
-						상품관리
-					</c:if>
-					<c:if test="${param.menu=='search'}" >
-						상품 목록조회
-					</c:if>
+					배송관리
 					</td>
 				</tr>
 			</table>
@@ -81,37 +70,6 @@ function fncGetUserList(currentPage) {
 	</tr>
 </table>
 
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="right">
-			<select name="searchCondition" class="ct_input_g" style="width:80px">
-				<option value="0"  ${ ! empty search.searchCondition && search.searchCondition==0 ? "selected" : "" }>상품번호</option>
-				<option value="1"  ${ ! empty search.searchCondition && search.searchCondition==1 ? "selected" : "" }>상품명</option>
-				<option value="2"  ${ ! empty search.searchCondition && search.searchCondition==2 ? "selected" : "" }>상품가격</option>
-			</select>
-			<input type="text" name="searchKeyword" 
-						value="${! empty search.searchKeyword ? search.searchKeyword : ""}"  
-								class="ct_input_g" style="width:200px; height:19px" >
-			</td>
-
-				<td align="right" width="70">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23">
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						검색
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23">
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
 			
 
 
@@ -130,11 +88,8 @@ function fncGetUserList(currentPage) {
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">상품상세정보</td>	
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">현재상태</td>
+		<td class="ct_list_b">배송현황</td>
 		<td class="ct_line02"></td>
-		<c:if test = "${param.menu =='manage'}">
-		<td class="ct_list_b">재고</td>
-		<td class="ct_line02"></td></c:if>	
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -155,30 +110,22 @@ function fncGetUserList(currentPage) {
 			<td align="left">${product.prodDetail }</td>		
 			<td></td>
 			<td align="left">
-				<c:if test="${product.stock!=0 }">판매중</c:if>
-				<c:if test="${product.stock==0 && (empty user ||  empty product.proTranCode)}">품절</c:if>
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='1  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">구매완료
 					<h8>배송하기</h8>
 					<input type="hidden" name="prodNo" id="prodNo"  value="${product.prodNo }" />
 					</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role && product.stock==0 }">품절</c:if>
 				</c:if>
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='2  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">배송중</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0  }">품절</c:if>
 				</c:if>
 				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='3  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">배송완료</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0 }">품절</c:if>
 				</c:if>
 			</td>	
-			<c:if test = "${param.menu =='manage'}">	
-			<td align="left">${product.stock } 개</td>
-			<td></td></c:if>
 		</tr>
 		<tr>
 			<td colspan="11" bgcolor="D6D7D6" height="1"></td>

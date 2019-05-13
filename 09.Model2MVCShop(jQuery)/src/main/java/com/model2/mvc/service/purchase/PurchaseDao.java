@@ -15,7 +15,7 @@ public interface PurchaseDao {
 	
 	public Map<String,Object> getPurchaseList(Search search,String buyerId) throws Exception;
 	
-	public Map<String,Object> getSaleList(Search search) throws Exception;
+	public Map<String,Object> getShippingList(Search search) throws Exception;
 	
 	public void updatePurcahse(Purchase purchase) throws Exception;
 	
@@ -23,7 +23,6 @@ public interface PurchaseDao {
 	
 	public int getTotalCount(Search search);
 	
-	public void updateQuantity(Purchase purchase);
 
 
 }

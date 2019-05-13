@@ -51,6 +51,10 @@
 				$(window.parent.frames["rightFrame"].document.location).attr("href","/product/listProduct?menu=manage");
 			});
 			
+			$( ".Depth03:contains('硅价包府')" ).on("click" , function() {
+				$(window.parent.frames["rightFrame"].document.location).attr("href","/purchase/shippingList?menu=manage");
+			});
+			
 			$( ".Depth03:contains('惑前八祸')" ).on("click" , function() {
 				$(window.parent.frames["rightFrame"].document.location).attr("href","/product/listProduct?menu=search");
 			});
@@ -120,6 +124,11 @@
 				<tr>
 					<td class="Depth03">
 					魄概惑前包府
+					</td>
+				</tr>
+				<tr>
+					<td class="Depth03">
+					硅价包府
 					</td>
 				</tr>
 				<tr>

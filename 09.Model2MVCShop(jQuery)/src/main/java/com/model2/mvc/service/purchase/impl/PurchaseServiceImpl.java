@@ -56,12 +56,6 @@ public class PurchaseServiceImpl implements PurchaseService{
 	}
 
 	@Override
-	public Map<String, Object> getSaleList(Search search) throws Exception {
-		return null;
-
-	}
-
-	@Override
 	public void updateTranCode(Purchase purchase) throws Exception {
 		purchaseDao.updateTranCode(purchase);
 		
@@ -74,8 +68,11 @@ public class PurchaseServiceImpl implements PurchaseService{
 	}
 
 	@Override
-	public void updateQuantity(Purchase purchase) throws Exception {
-		purchaseDao.updateQuantity(purchase);
-		
+	public Map<String, Object> getShippingList(Search search) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+
+
 }

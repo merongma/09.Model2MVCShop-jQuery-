@@ -134,7 +134,8 @@ function fncGetUserList(currentPage) {
 		<td class="ct_line02"></td>
 		<c:if test = "${param.menu =='manage'}">
 		<td class="ct_list_b">재고</td>
-		<td class="ct_line02"></td></c:if>	
+		<td class="ct_line02"></td>	
+		</c:if>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -157,28 +158,11 @@ function fncGetUserList(currentPage) {
 			<td align="left">
 				<c:if test="${product.stock!=0 }">판매중</c:if>
 				<c:if test="${product.stock==0 && (empty user ||  empty product.proTranCode)}">품절</c:if>
-				
-				<c:if test="${! empty product.proTranCode && product.proTranCode=='1  '}">
-					<c:if test="${user.role=='admin' && param.menu=='manage'}">구매완료
-					<h8>배송하기</h8>
-					<input type="hidden" name="prodNo" id="prodNo"  value="${product.prodNo }" />
-					</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role && product.stock==0 }">품절</c:if>
-				</c:if>
-				
-				<c:if test="${! empty product.proTranCode && product.proTranCode=='2  '}">
-					<c:if test="${user.role=='admin' && param.menu=='manage'}">배송중</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0  }">품절</c:if>
-				</c:if>
-				
-				<c:if test="${! empty product.proTranCode && product.proTranCode=='3  '}">
-					<c:if test="${user.role=='admin' && param.menu=='manage'}">배송완료</c:if>
-					<c:if test="${param.menu=='search' && ! empty user.role &&product.stock==0 }">품절</c:if>
-				</c:if>
 			</td>	
 			<c:if test = "${param.menu =='manage'}">	
 			<td align="left">${product.stock } 개</td>
-			<td></td></c:if>
+			<td></td>
+			</c:if>
 		</tr>
 		<tr>
 			<td colspan="11" bgcolor="D6D7D6" height="1"></td>

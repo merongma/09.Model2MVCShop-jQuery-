@@ -153,7 +153,7 @@ public class ProductController {
 	public String listProduct(@ModelAttribute("search") Search search, Model model, HttpServletRequest request)
 			throws Exception {
 
-		System.out.println("/user/listUser : GET / POST");
+		System.out.println("/product/listProduct : GET / POST");
 
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
