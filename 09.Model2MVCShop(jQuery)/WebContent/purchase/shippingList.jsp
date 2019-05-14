@@ -30,11 +30,9 @@ function fncGetUserList(currentPage) {
 		self.location ="/purchase/updateTranCodeByProd?menu=manage&prodNo="+$("#prodNo").val()+"&tranCode=2";
 	});
 
-	$( ".ct_list_pop td:nth-child(3)" ).css("color" , "green");
-	$("h7").css("color" , "green");
+	$( ".ct_list_pop td:nth-child(3)" ).css("color" , "purple");
+	$("h7").css("color" , "purple");
 	$("h8").css("color" , "blue");
-	
-	$(".ct_list_pop td:nth-child(9):contains('품절')").css("color","red");
 	
 	$(".ct_list_pop:nth-child(4n+6)" ).css("background-color" , "whitesmoke");
 
@@ -110,7 +108,6 @@ function fncGetUserList(currentPage) {
 			<td align="left">${product.prodDetail }</td>		
 			<td></td>
 			<td align="left">
-				
 				<c:if test="${! empty product.proTranCode && product.proTranCode=='1  '}">
 					<c:if test="${user.role=='admin' && param.menu=='manage'}">구매완료
 					<h8>배송하기</h8>

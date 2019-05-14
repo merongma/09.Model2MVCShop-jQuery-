@@ -62,7 +62,17 @@ public class PurchaseDaoImpl implements PurchaseDao {
 
 	@Override
 	public Map<String, Object> getShippingList(Search search) throws Exception {
-		return null;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		Purchase purchase = new Purchase();
+		
+		map.put("endRowNum",  search.getEndRowNum()+"" );
+		map.put("startRowNum",  search.getStartRowNum()+"" );
+		
+		List<Purchase> list = sqlSession.selectList("PurchaseMapper.getShippingList", map);
+		map.put("list", list);
+		
+		return map;
 	}
 
 	@Override

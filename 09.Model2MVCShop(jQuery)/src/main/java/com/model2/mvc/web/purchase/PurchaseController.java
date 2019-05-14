@@ -193,7 +193,7 @@ public class PurchaseController {
 		purchaseService.updateTranCode(purchase);
 		System.out.println("2" + purchase);
 
-		return "forward:/product/listProduct?prodNo=" + prodNo;
+		return "forward:/purchase/shippingList?prodNo=" + prodNo;
 	}
 
 	@RequestMapping(value = "updateTranCode", method = RequestMethod.GET)
@@ -228,18 +228,19 @@ public class PurchaseController {
 		// Business logic 수행
 		Map<String, Object> map = purchaseService.getShippingList(search);
 		
+		System.out.println("map값 : "+map);
 		System.out.println("list값 : "+map.get("list"));
 		List list = (List) map.get("list");
 
 		for (int i = 0; i < list.size(); i++) {
-			Product product = (Product) list.get(i);
-			int prodNo = product.getProdNo();
-			Purchase purchase = purchaseService.getPurchase2(prodNo);
-			String buyerId = purchase.getBuyer().getUserId();
 			
-			//Product product = productService.getProduct(prodNo);
-			//purchase.setPurchaseProd(product);
-			//list.set(i, purchase);
+			Purchase purchase = (Purchase) list.get(i);
+			int prodNo = purchase.getPurchaseProd().getProdNo();
+			Product product = productService.getProduct(prodNo);
+			purchase.setPurchaseProd(product);
+			product.setProTranCode(purchase.getTranCode());
+			list.set(i, purchase);
+			list.set(i, product);
 		}
 
 		Page resultPage = new Page(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit,
